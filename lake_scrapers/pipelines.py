@@ -13,7 +13,10 @@ from lake_scrapers import send_data_to_backend
 
 
 def convert_timestamp(timestamp, time_format="%d.%m.%Y %H:%M Uhr", timezone="Europe/Berlin") -> str:
-    time = datetime.strptime(timestamp, time_format)
+    try:
+        time = datetime.strptime(timestamp, time_format)
+    except ValueError:
+        time = datetime.fromtimestamp(int(timestamp) / 1000)
     local = pytz.timezone(timezone)
     time = local.localize(time)
     return time.astimezone(pytz.utc).isoformat()
