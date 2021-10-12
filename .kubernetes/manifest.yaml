@@ -22,10 +22,4 @@ spec:
                 name: telegram-token
             - configMapRef:
                 name: lake-uuids
-            command:
-            - python
-            - -m
-            - scrapy
-            - crawl
-            - pegelonline
           restartPolicy: Never
