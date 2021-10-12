@@ -4,7 +4,6 @@ import scrapy
 
 from lake_scrapers.items import LakeTemperatureItem
 from lake_scrapers.pipelines import convert_timestamp
-from lake_scrapers.spiders.pegelonline import PegelonlineSpider
 
 
 class WoogSpider(scrapy.Spider):
