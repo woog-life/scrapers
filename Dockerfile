@@ -1,10 +1,10 @@
-FROM python:3.9-slim
+FROM python:3.10-slim
 
 WORKDIR /usr/src/app
 
 ENV TZ=Europe/Berlin
 
-ADD main.py .
+ADD . .
 ADD requirements.txt .
 
 RUN pip install --no-cache-dir -r requirements.txt
