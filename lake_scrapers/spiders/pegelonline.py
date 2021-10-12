@@ -2,7 +2,7 @@ import os
 
 import scrapy
 
-from lake_scrapers.items import PegelonlineItem
+from lake_scrapers.items import LakeTemperatureItem
 
 
 class PegelonlineSpider(scrapy.Spider):
@@ -21,7 +21,7 @@ class PegelonlineSpider(scrapy.Spider):
 
     def start_requests(self):
         for url in self.start_urls:
-            yield scrapy.Request(url, lambda response, **kwargs: self.parse(response, **kwargs))
+            yield scrapy.Request(url, self.parse)
 
     def parse(self, response, **kwargs):
         temp_xpath = "//td[contains(text(), 'Wassertemperatur')]/../*[2]//text()"
@@ -32,4 +32,4 @@ class PegelonlineSpider(scrapy.Spider):
         pegelnr = url.rsplit("=")[-1]
         uuid = self.data[pegelnr]["UUID"]
 
-        return PegelonlineItem(temperature=temperature, timestamp=timestamp, uuid=uuid)
+        return LakeTemperatureItem(temperature=temperature, timestamp=timestamp, uuid=uuid)

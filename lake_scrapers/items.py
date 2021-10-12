@@ -6,7 +6,7 @@
 import scrapy
 
 
-class PegelonlineItem(scrapy.Item):
+class LakeTemperatureItem(scrapy.Item):
     temperature = scrapy.Field()
     timestamp = scrapy.Field()
     uuid = scrapy.Field()
