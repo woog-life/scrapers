@@ -3,6 +3,7 @@ import os
 import scrapy
 
 from lake_scrapers.items import LakeTemperatureItem
+from lake_scrapers.pipelines import convert_timestamp
 
 
 class PegelonlineSpider(scrapy.Spider):
@@ -28,6 +29,8 @@ class PegelonlineSpider(scrapy.Spider):
         time_xpath = "//td[contains(text(), 'Wassertemperatur')]/../*[3]//text()"
         temperature = response.xpath(temp_xpath).get()
         timestamp = response.xpath(time_xpath).get()
+        timestamp = convert_timestamp(timestamp)
+
         url = response.request.url
         pegelnr = url.rsplit("=")[-1]
         uuid = self.data[pegelnr]["UUID"]

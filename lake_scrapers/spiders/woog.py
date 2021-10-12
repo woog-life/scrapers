@@ -3,6 +3,7 @@ import os
 import scrapy
 
 from lake_scrapers.items import LakeTemperatureItem
+from lake_scrapers.pipelines import convert_timestamp
 from lake_scrapers.spiders.pegelonline import PegelonlineSpider
 
 
@@ -25,6 +26,8 @@ class WoogSpider(scrapy.Spider):
         time_xpath = "Water_Temperature/ts/text()"
         temperature = response.xpath(temp_xpath).get()
         timestamp = response.xpath(time_xpath).get()
+        timestamp = convert_timestamp(timestamp, is_timestamp_nanosecond=True)
+
         url = response.request.url
         accessToken = url.rsplit("=")[-1]
         uuid = self.data[accessToken]["UUID"]

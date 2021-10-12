@@ -12,11 +12,15 @@ import pytz
 from lake_scrapers import send_data_to_backend
 
 
-def convert_timestamp(timestamp, time_format="%d.%m.%Y %H:%M Uhr", timezone="Europe/Berlin") -> str:
-    try:
+def convert_timestamp(timestamp, time_format="%d.%m.%Y %H:%M Uhr", is_timestamp=False, is_timestamp_nanosecond=False,
+                      timezone="Europe/Berlin") -> str:
+    if not (is_timestamp or is_timestamp_nanosecond):
         time = datetime.strptime(timestamp, time_format)
-    except ValueError:
+    elif is_timestamp_nanosecond:
         time = datetime.fromtimestamp(int(timestamp) / 1000)
+    else:
+        time = datetime.fromtimestamp(int(timestamp))
+
     local = pytz.timezone(timezone)
     time = local.localize(time)
     return time.astimezone(pytz.utc).isoformat()
@@ -25,7 +29,7 @@ def convert_timestamp(timestamp, time_format="%d.%m.%Y %H:%M Uhr", timezone="Eur
 class LakeScrapersPipeline:
     def process_item(self, item, _spider):
         temperature = float(item['temperature'].replace(",", "."))
-        timestamp = convert_timestamp(item['timestamp'])
+        timestamp = item['timestamp']
         send_data_to_backend((timestamp, temperature), item['uuid'])
 
         return item
