@@ -1,5 +1,6 @@
 venv
 lake_scrapers/__pycache__
+lake_scrapers/spiders/__pycache__
 
 .idea
 *.iml
