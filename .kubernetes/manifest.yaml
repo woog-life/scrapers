@@ -1,0 +1,31 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: potsdam-scraper
+  namespace: wooglife
+spec:
+  schedule: "*/30 * * * *"
+  successfulJobsHistoryLimit: 1
+  failedJobsHistoryLimit: 1
+  jobTemplate:
+    spec:
+      backoffLimit: 0
+      template:
+        spec:
+          containers:
+          - name: scraper
+            image: ghcr.io/woog-life/lake-scrapers:{{TAG}}
+            envFrom:
+            - secretRef:
+                name: apikey
+            - secretRef:
+                name: telegram-token
+            - configMapRef:
+                name: lake-uuids
+            command:
+            - python
+            - -m
+            - scrapy
+            - crawl
+            - pegelonline
+          restartPolicy: Never
