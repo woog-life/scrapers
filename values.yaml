@@ -10,7 +10,7 @@ cronjob:
   failedJobsHistoryLimit: 1
   restartPolicy: Never
   labels:
-    app: scrapers-poll
+    app: scrapers
   requests:
     cpu: 100m
     memory: 100Mi
