@@ -20,4 +20,4 @@ cronjob:
 
 secret:
   name: scrapers-api-key
-  telegramToken: __API_KEY__
+  apiKey: __API_KEY__
