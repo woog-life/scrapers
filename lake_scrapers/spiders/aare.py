@@ -17,7 +17,7 @@ class AareSpider(scrapy.Spider):
 
     def parse(self, response, **kwargs):
         temp_xpath = response.xpath("//temp/text()").get().split("°")[0]
-        timestamp_xpath = response.xpath("//temp&#45;normal/text()").get().split("Letztes Update: ")[1]
+        timestamp_xpath = response.css("temp-normal::text").get().split("Letztes Update: ")[1]
 
         temperature = response.xpath(temp_xpath).get().strip()
         timestamp = response.xpath(timestamp_xpath).get().strip()
