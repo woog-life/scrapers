@@ -16,15 +16,10 @@ class AareSpider(scrapy.Spider):
             yield scrapy.Request(url, self.parse)
 
     def parse(self, response, **kwargs):
-        temp_xpath = response.xpath("//temp/text()").get().split("°")[0]
-        timestamp_xpath = response.css("temp-normal::text").get().split("Letztes Update: ")[1]
-
-        temperature = response.xpath(temp_xpath).get().strip()
-        timestamp = response.xpath(timestamp_xpath).get().strip()
+        temperature = response.xpath("//temp/text()").get().split("°")[0]
+        timestamp = response.css("temp-normal::text").get().split("Letztes Update: ")[1]
         timestamp = convert_timestamp(timestamp, time_format="%Y-%m-%d %H:%M:%S")
 
-        url = response.request.url
-        key = url.rsplit("/")[-2]
         uuid = os.getenv("AARE_UUID")
 
         return LakeTemperatureItem(temperature=temperature, timestamp=timestamp, uuid=uuid)
