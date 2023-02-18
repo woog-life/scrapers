@@ -19,7 +19,7 @@ class SeaTemperatureInfoSpider(scrapy.Spider):
         }
     }
     name = 'seatemperatureinfo'
-    allowed_domains = ['www.pegelonline.wsv.de']
+    allowed_domains = ['seatemperature.info']
     base_url = "https://seatemperature.info"
 
     def start_requests(self):
