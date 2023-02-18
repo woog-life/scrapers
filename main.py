@@ -3,13 +3,15 @@ from scrapy.utils.project import get_project_settings
 from twisted.internet import reactor
 
 from lake_scrapers.spiders.aare import AareSpider
-from lake_scrapers.spiders.blaarmeersen import BlaarmeersenSpider
 from lake_scrapers.spiders.alster import AlsterSpider
+from lake_scrapers.spiders.blaarmeersen import BlaarmeersenSpider
 from lake_scrapers.spiders.cuxhaven import CuxhavenSpider
 from lake_scrapers.spiders.pegelonline import PegelonlineSpider
+from lake_scrapers.spiders.seatemperatureinfo import SeaTemperatureInfoSpider
 from lake_scrapers.spiders.woog import WoogSpider
 
-crawlers = [PegelonlineSpider, WoogSpider, CuxhavenSpider, AlsterSpider, AareSpider, BlaarmeersenSpider]
+crawlers = [PegelonlineSpider, WoogSpider, CuxhavenSpider, AlsterSpider, AareSpider, BlaarmeersenSpider,
+            SeaTemperatureInfoSpider]
 
 settings = get_project_settings()
 runner = CrawlerRunner(settings)
