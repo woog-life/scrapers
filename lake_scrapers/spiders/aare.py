@@ -17,7 +17,7 @@ class AareSpider(scrapy.Spider):
 
     def parse(self, response, **kwargs):
         temperature = response.css("#aare-temperature")[0].root.text.split("°")[0]
-        timestamp = response.css("temp-normal::text").get().split("Letztes Update: ")[1]
+        timestamp = response.css("#aare-last-update")[0].root.text.split("Letztes Update: ")[1]
         timestamp = convert_timestamp(timestamp, time_format="%Y-%m-%d %H:%M:%S")
 
         uuid = os.getenv("AARE_UUID")
