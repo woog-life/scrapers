@@ -13,12 +13,16 @@ class PegelonlineSpider(scrapy.Spider):
         },
         "2730010": {
             "UUID": os.getenv("COLOGNE_UUID")
+        },
+        "9530020": {
+            "UUID": os.getenv("HUSUM_UUID")
         }
     }
     name = 'pegelonline'
     allowed_domains = ['www.pegelonline.wsv.de']
     start_urls = ['https://www.pegelonline.wsv.de/gast/stammdaten?pegelnr=2730010',
-                  'https://www.pegelonline.wsv.de/gast/stammdaten?pegelnr=580412']
+                  'https://www.pegelonline.wsv.de/gast/stammdaten?pegelnr=580412',
+                  'https://www.pegelonline.wsv.de/gast/stammdaten?pegelnr=9530020']
 
     def start_requests(self):
         for url in self.start_urls:
