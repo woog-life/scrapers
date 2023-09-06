@@ -1,4 +1,4 @@
 scrapy==2.10.1
-pytz==2023.3
+pytz==2023.3.post1
 requests==2.31.0
 urllib3==1.26.16
