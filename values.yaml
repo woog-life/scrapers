@@ -4,7 +4,7 @@ cronjob:
   name: scrapers
   image: ghcr.io/woog-life/scrapers:__TAG__
   imagePullPolicy: IfNotPresent
-  schedule: "CRON_TZ=UTC */30 * * * *"
+  schedule: "*/30 * * * *"
   backoffLimit: 0
   successfulJobsHistoryLimit: 1
   failedJobsHistoryLimit: 1
