@@ -17,6 +17,10 @@ class SeaTemperatureInfoSpider(scrapy.Spider):
         "heraklion-water-temperature.html": {
             "UUID": os.getenv("HERAKLION_UUID"),
             "regex": re.compile(r"Water temperature in Heraklion today is (?P<temperature>\d+(\.\d+)?)"),
+        },
+        "vancouver-water-temperature.html": {
+            "UUID": os.getenv("VANCOUVER_UUID"),
+            "regex": re.compile(r"Water temperature in Vancouver today is (?P<temperature>\d+(\.\d+)?)"),
         }
     }
     name = 'seatemperatureinfo'
