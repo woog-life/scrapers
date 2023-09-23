@@ -10,15 +10,21 @@ class SeaTemperatureInfoScraper(Scraper):
     data = {
         "de/spanien/santander-wassertemperatur.html": {
             "UUID": os.getenv("SANTANDER_UUID"),
-            "regex": re.compile(r"Die Wassertemperatur in Santander beträgt heute (?P<temperature>\d+(\.\d+)?)"),
+            "regex": re.compile(
+                r"Die Wassertemperatur in Santander beträgt heute (?P<temperature>\d+(\.\d+)?)"
+            ),
         },
         "heraklion-water-temperature.html": {
             "UUID": os.getenv("HERAKLION_UUID"),
-            "regex": re.compile(r"Water temperature in Heraklion today is (?P<temperature>\d+(\.\d+)?)"),
+            "regex": re.compile(
+                r"Water temperature in Heraklion today is (?P<temperature>\d+(\.\d+)?)"
+            ),
         },
         "vancouver-water-temperature.html": {
             "UUID": os.getenv("VANCOUVER_UUID"),
-            "regex": re.compile(r"Water temperature in Vancouver today is (?P<temperature>\d+(\.\d+)?)"),
+            "regex": re.compile(
+                r"Water temperature in Vancouver today is (?P<temperature>\d+(\.\d+)?)"
+            ),
         },
     }
     headers = {
@@ -26,9 +32,11 @@ class SeaTemperatureInfoScraper(Scraper):
     }
 
     base_url = "https://seatemperature.info"
-    paths = ["de/spanien/santander-wassertemperatur.html",
-             "heraklion-water-temperature.html",
-             "vancouver-water-temperature.html"]
+    paths = [
+        "de/spanien/santander-wassertemperatur.html",
+        "heraklion-water-temperature.html",
+        "vancouver-water-temperature.html",
+    ]
 
     def parse(self, response, **kwargs):
         path = response.request.url.path.lstrip("/")
@@ -41,4 +49,6 @@ class SeaTemperatureInfoScraper(Scraper):
         timestamp = convert_timestamp(timestamp, is_timestamp=True)
 
         uuid = self.data[path]["UUID"]
-        return LakeTemperatureItem(temperature=temperature, timestamp=timestamp, uuid=uuid)
+        return LakeTemperatureItem(
+            temperature=temperature, timestamp=timestamp, uuid=uuid
+        )

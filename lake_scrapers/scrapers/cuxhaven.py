@@ -6,13 +6,9 @@ from lake_scrapers.scraper import Scraper
 
 
 class CuxhavenScraper(Scraper):
-    data = {
-        "cuxhaven": {
-            "UUID": os.getenv("CUXHAVEN_UUID")
-        }
-    }
+    data = {"cuxhaven": {"UUID": os.getenv("CUXHAVEN_UUID")}}
     base_url = "https://www.tourlogger.de"
-    paths = ['wassertemperatur/cuxhaven']
+    paths = ["wassertemperatur/cuxhaven"]
 
     def parse(self, response, **kwargs):
         css_class = ".tourlogger-wassertemperatur"
@@ -25,4 +21,6 @@ class CuxhavenScraper(Scraper):
         key = path.rsplit("/")[-2]
         uuid = self.data[key]["UUID"]
 
-        return LakeTemperatureItem(temperature=temperature, timestamp=timestamp, uuid=uuid)
+        return LakeTemperatureItem(
+            temperature=temperature, timestamp=timestamp, uuid=uuid
+        )

@@ -13,11 +13,15 @@ class BlaarmeersenScraper(Scraper):
     paths = [""]
 
     def parse(self, response: httpx.Response, **kwargs):
-        temperature_regex = re.compile(r"Watertemperatuur\s*\n?\s*(\d+\.\d+)&#8451;", re.IGNORECASE)
+        temperature_regex = re.compile(
+            r"Watertemperatuur\s*\n?\s*(\d+\.\d+)&#8451;", re.IGNORECASE
+        )
         timestamp = datetime.now().timestamp()
         timestamp = convert_timestamp(timestamp, is_timestamp=True)
 
         temperature = temperature_regex.findall(response.text)[0]
 
         uuid = os.getenv("BLAARMEERSEN_UUID")
-        return LakeTemperatureItem(temperature=temperature, timestamp=timestamp, uuid=uuid)
+        return LakeTemperatureItem(
+            temperature=temperature, timestamp=timestamp, uuid=uuid
+        )

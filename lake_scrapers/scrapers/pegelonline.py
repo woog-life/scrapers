@@ -6,20 +6,16 @@ from lake_scrapers.scraper import Scraper
 
 class PegelonlineScraper(Scraper):
     data = {
-        "580412": {
-            "UUID": os.getenv("POTSDAM_UUID")
-        },
-        "2730010": {
-            "UUID": os.getenv("COLOGNE_UUID")
-        },
-        "9530020": {
-            "UUID": os.getenv("HUSUM_UUID")
-        }
+        "580412": {"UUID": os.getenv("POTSDAM_UUID")},
+        "2730010": {"UUID": os.getenv("COLOGNE_UUID")},
+        "9530020": {"UUID": os.getenv("HUSUM_UUID")},
     }
     base_url = "https://www.pegelonline.wsv.de"
-    paths = ['gast/stammdaten?pegelnr=2730010',
-             'gast/stammdaten?pegelnr=580412',
-             'gast/stammdaten?pegelnr=9530020']
+    paths = [
+        "gast/stammdaten?pegelnr=2730010",
+        "gast/stammdaten?pegelnr=580412",
+        "gast/stammdaten?pegelnr=9530020",
+    ]
 
     def parse(self, response, **kwargs):
         temp_xpath = "//td[contains(text(), 'Wassertemperatur')]/../*[2]//text()"
@@ -35,4 +31,6 @@ class PegelonlineScraper(Scraper):
         pegelnr = query.rsplit("=")[-1]
         uuid = self.data[pegelnr]["UUID"]
 
-        return LakeTemperatureItem(temperature=temperature, timestamp=timestamp, uuid=uuid)
+        return LakeTemperatureItem(
+            temperature=temperature, timestamp=timestamp, uuid=uuid
+        )

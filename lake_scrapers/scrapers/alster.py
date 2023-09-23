@@ -7,13 +7,9 @@ from lake_scrapers.scraper import Scraper
 
 
 class AlsterScraper(Scraper):
-    data = {
-        "clp1": {
-            "UUID": os.getenv("ALSTER_UUID")
-        }
-    }
+    data = {"clp1": {"UUID": os.getenv("ALSTER_UUID")}}
     base_url = "https://www.hamburg.de"
-    paths = ['clp/hu/lombardsbruecke/clp1/']
+    paths = ["clp/hu/lombardsbruecke/clp1/"]
 
     def parse(self, response: httpx.Response):
         soup = self.soup(response)
@@ -28,4 +24,6 @@ class AlsterScraper(Scraper):
         key = path.rsplit("/")[-2]
         uuid = self.data[key]["UUID"]
 
-        return LakeTemperatureItem(temperature=temperature, timestamp=timestamp, uuid=uuid)
+        return LakeTemperatureItem(
+            temperature=temperature, timestamp=timestamp, uuid=uuid
+        )

@@ -21,7 +21,9 @@ def create_logger(name: str, level: int = logging.DEBUG) -> logging.Logger:
     logger = logging.Logger(name)
     ch = logging.StreamHandler(sys.stdout)
 
-    formatting = "[{}] %(asctime)s\t%(levelname)s\t%(module)s.%(funcName)s#%(lineno)d | %(message)s".format(name)
+    formatting = "[{}] %(asctime)s\t%(levelname)s\t%(module)s.%(funcName)s#%(lineno)d | %(message)s".format(
+        name
+    )
     formatter = logging.Formatter(formatting)
     ch.setFormatter(formatter)
 
@@ -31,7 +33,9 @@ def create_logger(name: str, level: int = logging.DEBUG) -> logging.Logger:
     return logger
 
 
-def send_data_to_backend(water_information: Tuple[str, float], uuid: str) -> Tuple[Optional[httpx.Response], str]:
+def send_data_to_backend(
+    water_information: Tuple[str, float], uuid: str
+) -> Tuple[Optional[httpx.Response], str]:
     BACKEND_URL = os.getenv("BACKEND_URL") or "http://backend:8080"
     BACKEND_PATH = os.getenv("BACKEND_PATH") or "lake/{}/temperature"
     API_KEY = os.getenv("API_KEY")
@@ -49,8 +53,12 @@ def send_data_to_backend(water_information: Tuple[str, float], uuid: str) -> Tup
     logger.debug(f"Send {data} to {url}")
 
     try:
-        response = httpx.put(url, json=data, headers=headers, timeout=10, follow_redirects=True)
-        logger.debug(f"success: {response.status_code < 400} | content: {response.content}")
+        response = httpx.put(
+            url, json=data, headers=headers, timeout=10, follow_redirects=True
+        )
+        logger.debug(
+            f"success: {response.status_code < 400} | content: {response.content}"
+        )
     except httpx.HTTPError:
         logger.exception(f"Error while connecting to backend ({url})", exc_info=True)
         return None, url
@@ -58,8 +66,13 @@ def send_data_to_backend(water_information: Tuple[str, float], uuid: str) -> Tup
     return response, url
 
 
-def convert_timestamp(timestamp, time_format="%d.%m.%Y %H:%M Uhr", is_timestamp=False, is_timestamp_nanosecond=False,
-                      timezone="Europe/Berlin") -> str:
+def convert_timestamp(
+    timestamp,
+    time_format="%d.%m.%Y %H:%M Uhr",
+    is_timestamp=False,
+    is_timestamp_nanosecond=False,
+    timezone="Europe/Berlin",
+) -> str:
     if not (is_timestamp or is_timestamp_nanosecond):
         time = datetime.strptime(timestamp, time_format)
     elif is_timestamp_nanosecond:

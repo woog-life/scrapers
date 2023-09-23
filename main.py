@@ -18,8 +18,15 @@ def process_item(item: LakeTemperatureItem, logger):
     send_data_to_backend((timestamp, temperature), item.uuid)
 
 
-SCRAPER_CLASSES = [AareScraper, AlsterScraper, BlaarmeersenScraper, CuxhavenScraper, PegelonlineScraper,
-                   SeaTemperatureInfoScraper, WoogScraper]
+SCRAPER_CLASSES = [
+    AareScraper,
+    AlsterScraper,
+    BlaarmeersenScraper,
+    CuxhavenScraper,
+    PegelonlineScraper,
+    SeaTemperatureInfoScraper,
+    WoogScraper,
+]
 # SCRAPER_CLASSES = [WoogSpider]
 
 
@@ -33,8 +40,6 @@ def main():
                 if not scraper.is_allowed_to_scrape(path):
                     logger.error(f"{path}: no")
                     raise Exception(f"not allowed to scrape {path}")
-                else:
-                    logger.info(f"{path}: yes")
                 response = scraper.request(path)
                 item = scraper.parse(response)
                 process_item(item, logger)
