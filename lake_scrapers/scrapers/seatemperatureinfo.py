@@ -2,13 +2,11 @@ import os
 import re
 from datetime import datetime
 
-import scrapy
-
-from lake_scrapers.items import LakeTemperatureItem
-from lake_scrapers.pipelines import convert_timestamp
+from lake_scrapers import convert_timestamp, LakeTemperatureItem
+from lake_scrapers.scraper import Scraper
 
 
-class SeaTemperatureInfoSpider(scrapy.Spider):
+class SeaTemperatureInfoScraper(Scraper):
     data = {
         "de/spanien/santander-wassertemperatur.html": {
             "UUID": os.getenv("SANTANDER_UUID"),
@@ -21,22 +19,19 @@ class SeaTemperatureInfoSpider(scrapy.Spider):
         "vancouver-water-temperature.html": {
             "UUID": os.getenv("VANCOUVER_UUID"),
             "regex": re.compile(r"Water temperature in Vancouver today is (?P<temperature>\d+(\.\d+)?)"),
-        }
+        },
     }
-    name = 'seatemperatureinfo'
-    allowed_domains = ['seatemperature.info']
-    base_url = "https://seatemperature.info"
+    headers = {
+        "User-Agent": "Mozilla/5.0 (X11; Linux x86_64; rv:109.0) Gecko/20100101 Firefox/117.0",
+    }
 
-    def start_requests(self):
-        for path in self.data.keys():
-            url = "/".join([self.base_url, path])
-            yield scrapy.Request(url, self.parse, headers={
-                "User-Agent": "Mozilla/5.0 (X11; Linux x86_64; rv:109.0) Gecko/20100101 Firefox/117.0"
-            })
+    base_url = "https://seatemperature.info"
+    paths = ["de/spanien/santander-wassertemperatur.html",
+             "heraklion-water-temperature.html",
+             "vancouver-water-temperature.html"]
 
     def parse(self, response, **kwargs):
-        url = response.request.url
-        path = url.replace(self.base_url + "/", "")
+        path = response.request.url.path.lstrip("/")
         regex = self.data[path]["regex"]
         content: str = response.text
         matches = regex.search(content)

@@ -1,26 +1,45 @@
-from scrapy.crawler import CrawlerRunner
-from scrapy.utils.project import get_project_settings
-from twisted.internet import reactor
+import sys
+import traceback
 
-from lake_scrapers.spiders.aare import AareSpider
-from lake_scrapers.spiders.alster import AlsterSpider
-from lake_scrapers.spiders.blaarmeersen import BlaarmeersenSpider
-from lake_scrapers.spiders.cuxhaven import CuxhavenSpider
-from lake_scrapers.spiders.pegelonline import PegelonlineSpider
-from lake_scrapers.spiders.seatemperatureinfo import SeaTemperatureInfoSpider
-from lake_scrapers.spiders.woog import WoogSpider
+from lake_scrapers import send_data_to_backend, create_logger
+from lake_scrapers import LakeTemperatureItem
+from lake_scrapers.scrapers.aare import AareScraper
+from lake_scrapers.scrapers.alster import AlsterScraper
+from lake_scrapers.scrapers.blaarmeersen import BlaarmeersenScraper
+from lake_scrapers.scrapers.cuxhaven import CuxhavenScraper
+from lake_scrapers.scrapers.pegelonline import PegelonlineScraper
+from lake_scrapers.scrapers.seatemperatureinfo import SeaTemperatureInfoScraper
+from lake_scrapers.scrapers.woog import WoogScraper
 
-crawlers = [PegelonlineSpider, WoogSpider, CuxhavenSpider, AlsterSpider, AareSpider, BlaarmeersenSpider,
-            SeaTemperatureInfoSpider]
 
-settings = get_project_settings()
-runner = CrawlerRunner(settings)
-for crawler in crawlers:
-    # process = CrawlerProcess(get_project_settings())
-    # process.crawl(crawler)
-    # process.start()
-    runner.crawl(crawler)
+def process_item(item: LakeTemperatureItem, logger):
+    temperature = float(item.temperature.replace(",", "."))
+    timestamp = item.timestamp
+    send_data_to_backend((timestamp, temperature), item.uuid)
 
-d = runner.join()
-d.addBoth(lambda _: reactor.stop())
-reactor.run()
+
+SCRAPER_CLASSES = [AareScraper, AlsterScraper, BlaarmeersenScraper, CuxhavenScraper, PegelonlineScraper,
+                   SeaTemperatureInfoScraper, WoogScraper]
+# SCRAPER_CLASSES = [WoogSpider]
+
+
+def main():
+    fail = False
+    for scraperClass in SCRAPER_CLASSES:
+        logger = create_logger(f"scraper_{scraperClass.__name__}")
+        scraper = scraperClass()
+        for path in scraper.paths:
+            try:
+                response = scraper.request(path)
+                item = scraper.parse(response)
+                process_item(item, logger)
+            except Exception as e:
+                logger.error(f"failed to process item: {traceback.print_exception(e)}")
+                fail = True
+
+    if fail:
+        sys.exit(1)
+
+
+if __name__ == "__main__":
+    main()
