@@ -1,8 +1,8 @@
 import sys
 import traceback
 
-from lake_scrapers import send_data_to_backend, create_logger
 from lake_scrapers import LakeTemperatureItem
+from lake_scrapers import send_data_to_backend, create_logger
 from lake_scrapers.scrapers.aare import AareScraper
 from lake_scrapers.scrapers.alster import AlsterScraper
 from lake_scrapers.scrapers.blaarmeersen import BlaarmeersenScraper
@@ -30,6 +30,11 @@ def main():
         scraper = scraperClass()
         for path in scraper.paths:
             try:
+                if not scraper.is_allowed_to_scrape(path):
+                    logger.error(f"{path}: no")
+                    raise Exception(f"not allowed to scrape {path}")
+                else:
+                    logger.info(f"{path}: yes")
                 response = scraper.request(path)
                 item = scraper.parse(response)
                 process_item(item, logger)

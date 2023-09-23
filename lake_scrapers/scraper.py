@@ -1,3 +1,4 @@
+import urllib.robotparser
 from abc import abstractmethod
 from dataclasses import dataclass
 
@@ -18,7 +19,12 @@ class Request:
 class Scraper:
     base_url: str
     paths: list[str]
-    headers: dict = None
+    headers: dict = {"User-Agent": "woog.life-scraper"}
+
+    def __init__(self):
+        robots_url = self.base_url.rstrip("/") + "/robots.txt"
+        self.robots = urllib.robotparser.RobotFileParser(robots_url)
+        self.robots.read()
 
     @staticmethod
     def soup(response: httpx.Response) -> bs4.BeautifulSoup:
@@ -44,3 +50,7 @@ class Scraper:
             raise NotImplementedError(f"this only supports 'html' and 'xml' not {_type}")
 
         return tree.xpath(xpath)
+
+    def is_allowed_to_scrape(self, path: str):
+        user_agent = self.headers.get("User-Agent", "")
+        return self.robots.can_fetch(user_agent, path)
