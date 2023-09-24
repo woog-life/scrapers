@@ -34,13 +34,12 @@ def create_logger(name: str, level: int = logging.DEBUG) -> logging.Logger:
 
 
 def send_data_to_backend(
-    water_information: Tuple[str, float], uuid: str
+    water_information: Tuple[str, float], uuid: str, logger
 ) -> Tuple[Optional[httpx.Response], str]:
     BACKEND_URL = os.getenv("BACKEND_URL") or "http://backend:8080"
     BACKEND_PATH = os.getenv("BACKEND_PATH") or "lake/{}/temperature"
     API_KEY = os.getenv("API_KEY")
 
-    logger = create_logger(inspect.currentframe().f_code.co_name)
     path = BACKEND_PATH.format(uuid)
     url = "/".join([BACKEND_URL, path])
 
