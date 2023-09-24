@@ -2,6 +2,4 @@
 
 ## Add a new scraper
 
-```bash
-scrapy genspider {name} {url}
-```
+Copy an existing scraper from `lake_scrapers/scrapers` and update the relevant elements (at least `base_url`, `paths`, `parse()`)
