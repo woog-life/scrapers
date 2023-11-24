@@ -1,5 +1,5 @@
 pytz==2023.3.post1
-httpx==0.25.1
+httpx==0.25.2
 beautifulsoup4==4.12.2
 lxml~=4.9.3
 urllib3==2.1.0
