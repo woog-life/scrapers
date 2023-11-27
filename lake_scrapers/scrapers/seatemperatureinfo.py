@@ -11,19 +11,29 @@ class SeaTemperatureInfoScraper(Scraper):
         "de/spanien/santander-wassertemperatur.html": {
             "UUID": os.getenv("SANTANDER_UUID"),
             "regex": re.compile(
-                r"Die Wassertemperatur in Santander beträgt heute (?P<temperature>\d+(\.\d+)?)"
+                r"Die Wassertemperatur in Santander beträgt heute (?P<temperature>\d+(\.\d+)?)",
+                re.IGNORECASE,
             ),
         },
         "heraklion-water-temperature.html": {
             "UUID": os.getenv("HERAKLION_UUID"),
             "regex": re.compile(
-                r"Water temperature in Heraklion today is (?P<temperature>\d+(\.\d+)?)"
+                r"Water temperature in Heraklion today is (?P<temperature>\d+(\.\d+)?)",
+                re.IGNORECASE,
             ),
         },
         "vancouver-water-temperature.html": {
             "UUID": os.getenv("VANCOUVER_UUID"),
             "regex": re.compile(
-                r"Water temperature in Vancouver today is (?P<temperature>\d+(\.\d+)?)"
+                r"Water temperature in Vancouver today is (?P<temperature>\d+(\.\d+)?)",
+                re.IGNORECASE,
+            ),
+        },
+        "italy/sorrento-water-temperature.html": {
+            "UUID": os.getenv("SORRENTO_UUID"),
+            "regex": re.compile(
+                r"Water temperature in Sorrento today is (?P<temperature>\d+(\.\d+)?)",
+                re.IGNORECASE,
             ),
         },
     }
@@ -36,6 +46,7 @@ class SeaTemperatureInfoScraper(Scraper):
         "de/spanien/santander-wassertemperatur.html",
         "heraklion-water-temperature.html",
         "vancouver-water-temperature.html",
+        "italy/sorrento-water-temperature.html",
     ]
 
     def parse(self, response, **kwargs):
