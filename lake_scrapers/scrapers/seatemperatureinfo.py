@@ -61,7 +61,10 @@ class SeaTemperatureInfoScraper(Scraper):
         regex = self.data[path]["regex"]
         content: str = response.text
         matches = regex.search(content)
-        temperature = matches.group("temperature")
+        try:
+            temperature = matches.group("temperature")
+        except AttributeError:
+            print(content)
 
         timestamp = datetime.now().timestamp()
         timestamp = convert_timestamp(timestamp, is_timestamp=True)
