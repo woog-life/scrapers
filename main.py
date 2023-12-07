@@ -8,7 +8,7 @@ from lake_scrapers.scrapers.alster import AlsterScraper
 from lake_scrapers.scrapers.blaarmeersen import BlaarmeersenScraper
 from lake_scrapers.scrapers.cuxhaven import CuxhavenScraper
 from lake_scrapers.scrapers.pegelonline import PegelonlineScraper
-from lake_scrapers.scrapers.seatemperatureinfo import SeaTemperatureInfoScraper
+from lake_scrapers.scrapers.seatemperatureorg import SeaTemperatureOrgScraper
 from lake_scrapers.scrapers.woog import WoogScraper
 
 
@@ -24,7 +24,7 @@ SCRAPER_CLASSES = [
     BlaarmeersenScraper,
     CuxhavenScraper,
     PegelonlineScraper,
-    SeaTemperatureInfoScraper,
+    SeaTemperatureOrgScraper,
     WoogScraper,
 ]
 # SCRAPER_CLASSES = [WoogSpider]
