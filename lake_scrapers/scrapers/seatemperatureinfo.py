@@ -2,6 +2,8 @@ import os
 import re
 from datetime import datetime
 
+import httpx
+
 from lake_scrapers import convert_timestamp, LakeTemperatureItem
 from lake_scrapers.scraper import Scraper
 
@@ -48,6 +50,11 @@ class SeaTemperatureInfoScraper(Scraper):
         "vancouver-water-temperature.html",
         "italy/sorrento-water-temperature.html",
     ]
+
+    def request(self, path: str) -> httpx.Response:
+        url = "/".join([self.base_url.rstrip("/"), path.lstrip("/")])
+
+        return httpx.post(url, headers=self.headers, timeout=15, follow_redirects=True)
 
     def parse(self, response, **kwargs):
         path = response.request.url.path.lstrip("/")
