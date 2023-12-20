@@ -6,7 +6,7 @@ import bs4
 import httpx
 import lxml.etree
 
-from lake_scrapers import LakeTemperatureItem
+from lake_scrapers import LakeTemperatureItem, create_logger
 
 
 @dataclass
@@ -21,9 +21,25 @@ class Scraper:
     headers: dict = {"User-Agent": "woog.life-scraper"}
 
     def __init__(self):
+        logger = create_logger("scraper.__init__")
         robots_url = self.base_url.rstrip("/") + "/robots.txt"
-        self.robots = urllib.robotparser.RobotFileParser(robots_url)
-        self.robots.read()
+        self.robots = urllib.robotparser.RobotFileParser()
+        try:
+            response = httpx.get(
+                robots_url, follow_redirects=True, timeout=15, headers=self.headers
+            )
+        except httpx.HTTPError as e:
+            logger.error(
+                f"got http error ({e}) when trying to retrieve robots.txt from {robots_url}"
+            )
+            logger.error("setting `disallow_all = True` for this robot")
+            self.robots.disallow_all = True
+        except httpx.ReadTimeout:
+            logger.error(f"got read timeout error for {robots_url}")
+            logger.error("setting `disallow_all = True` for this scraper")
+            self.robots.disallow_all = True
+        else:
+            self.robots.parse(response.text.splitlines())
 
     @staticmethod
     def soup(response: httpx.Response) -> bs4.BeautifulSoup:
@@ -38,7 +54,7 @@ class Scraper:
 
     @abstractmethod
     def parse(self, response: httpx.Response) -> LakeTemperatureItem:
-        ...
+        raise NotImplementedError
 
     @staticmethod
     def xpath(xpath: str, response: httpx.Response, _type: str = "html"):
