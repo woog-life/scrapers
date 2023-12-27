@@ -40,7 +40,7 @@ def main():
                 if not scraper.is_allowed_to_scrape(path):
                     logger.error(f"{path}: no")
                     raise Exception(f"not allowed to scrape `{path}`")
-                response = scraper.request(path)
+                response = scraper.request(path, retry_count=3)
                 item = scraper.parse(response)
                 process_item(item, logger)
             except Exception as e:

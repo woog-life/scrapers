@@ -47,10 +47,21 @@ class Scraper:
 
         return bs4.BeautifulSoup(response.text, "html.parser")
 
-    def request(self, path: str) -> httpx.Response:
+    def request(self, path: str, retry_count: int = 0) -> httpx.Response:
+        logger = create_logger("scraper.request")
         url = "/".join([self.base_url.rstrip("/"), path.lstrip("/")])
 
-        return httpx.get(url, headers=self.headers, timeout=15, follow_redirects=True)
+        # noinspection PyBroadException
+        try:
+            return httpx.get(
+                url, headers=self.headers, timeout=15, follow_redirects=True
+            )
+        except Exception as e:
+            logger.error(f"retry count: {retry_count}", exc_info=True)
+            if retry_count == 0:
+                raise e
+
+        return self.request(path, retry_count=retry_count - 1)
 
     @abstractmethod
     def parse(self, response: httpx.Response) -> LakeTemperatureItem:
