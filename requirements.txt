@@ -1,5 +1,5 @@
 pytz==2023.4
-httpx==0.25.2
+httpx==0.26.0
 beautifulsoup4==4.12.2
 lxml~=5.1.0
 urllib3==2.1.0
