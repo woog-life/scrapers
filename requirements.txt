@@ -1,4 +1,4 @@
-pytz==2023.3.post1
+pytz==2023.4
 httpx==0.25.2
 beautifulsoup4==4.12.2
 lxml~=5.1.0
