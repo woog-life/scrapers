@@ -32,9 +32,9 @@ SCRAPER_CLASSES = [
 
 def main():
     fail = False
-    for scraperClass in SCRAPER_CLASSES:
-        logger = create_logger(f"scraper_{scraperClass.__name__}")
-        scraper = scraperClass()
+    for scraper_class in SCRAPER_CLASSES:
+        logger = create_logger(f"scraper_{scraper_class.__name__}")
+        scraper = scraper_class()
         for path in scraper.paths:
             try:
                 if not scraper.is_allowed_to_scrape(path):
