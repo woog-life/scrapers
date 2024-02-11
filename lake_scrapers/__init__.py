@@ -34,7 +34,7 @@ def create_logger(name: str, level: int = logging.DEBUG) -> logging.Logger:
 
 
 def send_data_to_backend(
-    water_information: Tuple[str, float], uuid: str, logger
+    water_timestamp: str, water_temperature: float, uuid: str, logger
 ) -> Tuple[Optional[httpx.Response], str]:
     BACKEND_URL = os.getenv("BACKEND_URL") or "http://backend:8080"
     BACKEND_PATH = os.getenv("BACKEND_PATH") or "lake/{}/temperature"
@@ -43,7 +43,6 @@ def send_data_to_backend(
     path = BACKEND_PATH.format(uuid)
     url = "/".join([BACKEND_URL, path])
 
-    water_timestamp, water_temperature = water_information
     if water_temperature <= 0:
         return None, "water_temperature is <= 0, please approve this manually."
 

@@ -15,7 +15,7 @@ from lake_scrapers.scrapers.woog import WoogScraper
 def process_item(item: LakeTemperatureItem, logger):
     temperature = float(item.temperature.replace(",", "."))
     timestamp = item.timestamp
-    send_data_to_backend((timestamp, temperature), item.uuid, logger)
+    send_data_to_backend(timestamp, temperature, item.uuid, logger)
 
 
 SCRAPER_CLASSES = [
