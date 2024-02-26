@@ -24,7 +24,6 @@ class PegelonlineScraper(Scraper):
         temperature = self.xpath(temp_xpath, response)
         temperature = temperature[0]
         timestamp = self.xpath(time_xpath, response)[0]
-        timestamp = timestamp
         timestamp = convert_timestamp(timestamp)
 
         query = response.request.url.query.decode("UTF-8")
