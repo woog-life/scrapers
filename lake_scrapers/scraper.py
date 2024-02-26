@@ -1,18 +1,11 @@
 import urllib.robotparser
 from abc import abstractmethod
-from dataclasses import dataclass
 
 import bs4
 import httpx
 import lxml.etree
 
 from lake_scrapers import LakeTemperatureItem, create_logger
-
-
-@dataclass
-class Request:
-    def __init__(self, path: str):
-        self.path = path
 
 
 class Scraper:
