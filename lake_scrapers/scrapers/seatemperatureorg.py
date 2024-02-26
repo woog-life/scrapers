@@ -6,35 +6,29 @@ from lake_scrapers import convert_timestamp, LakeTemperatureItem
 from lake_scrapers.scraper import Scraper
 
 
+DEFAULT_TEMPERATURE_REGEX = re.compile(
+    r"^(?P<temperature>\d+(\.\d+)?).C\s+",
+    re.IGNORECASE,
+)
+
+
 class SeaTemperatureOrgScraper(Scraper):
     data = {
         "europe/italy/sorrento.htm": {
             "UUID": os.getenv("SORRENTO_UUID"),
-            "regex": re.compile(
-                r"^(?P<temperature>\d+(\.\d+)?).C\s+",
-                re.IGNORECASE,
-            ),
+            "regex": DEFAULT_TEMPERATURE_REGEX,
         },
         "europe/spain/santander.htm": {
             "UUID": os.getenv("SANTANDER_UUID"),
-            "regex": re.compile(
-                r"^(?P<temperature>\d+(\.\d+)?).C\s+",
-                re.IGNORECASE,
-            ),
+            "regex": DEFAULT_TEMPERATURE_REGEX,
         },
         "europe/greece/heraklion.htm": {
             "UUID": os.getenv("HERAKLION_UUID"),
-            "regex": re.compile(
-                r"^(?P<temperature>\d+(\.\d+)?).C\s+",
-                re.IGNORECASE,
-            ),
+            "regex": DEFAULT_TEMPERATURE_REGEX,
         },
         "north-america/canada/vancouver.htm": {
             "UUID": os.getenv("VANCOUVER_UUID"),
-            "regex": re.compile(
-                r"^(?P<temperature>\d+(\.\d+)?).C\s+",
-                re.IGNORECASE,
-            ),
+            "regex": DEFAULT_TEMPERATURE_REGEX,
         },
     }
 
