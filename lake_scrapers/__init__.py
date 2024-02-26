@@ -1,4 +1,3 @@
-import inspect
 import logging
 import os
 import sys
@@ -65,11 +64,11 @@ def send_data_to_backend(
 
 
 def convert_timestamp(
-    timestamp,
-    time_format="%d.%m.%Y %H:%M Uhr",
-    is_timestamp=False,
-    is_timestamp_nanosecond=False,
-    timezone="Europe/Berlin",
+    timestamp: int | str,
+    time_format: str = "%d.%m.%Y %H:%M Uhr",
+    is_timestamp: bool = False,
+    is_timestamp_nanosecond: bool = False,
+    timezone: str = "Europe/Berlin",
 ) -> str:
     if not (is_timestamp or is_timestamp_nanosecond):
         time = datetime.strptime(timestamp, time_format)
