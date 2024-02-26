@@ -27,7 +27,7 @@ SCRAPER_CLASSES = [
     SeaTemperatureOrgScraper,
     WoogScraper,
 ]
-# SCRAPER_CLASSES = [WoogSpider]
+# SCRAPER_CLASSES = [WoogScraper]
 
 
 def main():
